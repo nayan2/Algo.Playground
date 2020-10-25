@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Basic.HashMap;
 
 namespace Basic
 {
@@ -6,9 +8,29 @@ namespace Basic
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Testing");
+
         }
     }
+    
+    
+
+    // public class Person
+    // {
+    //     private string FirstName;
+    //     private string LastName;
+    //
+    //     public Person(string firstName, string lastName)
+    //         => (FirstName, LastName) = (firstName, LastName);
+    //
+    //     public void Deconstruct(out string firstName, out string lastName)
+    //         => (firstName, lastName) = (FirstName, LastName);
+    //
+    //     public static bool IsInChat(Person p) => p switch
+    //     {
+    //         ("x", "y") => true,
+    //         _ => false
+    //     };
+    // }
     
     // Testing
     // var testQueue = new PriorityQueue<int>(5);
