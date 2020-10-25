@@ -8,7 +8,7 @@ namespace Basic
     {
         static void Main(string[] args)
         {
-
+            
         }
     }
     

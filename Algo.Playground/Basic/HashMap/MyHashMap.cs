@@ -26,43 +26,51 @@ namespace Basic.HashMap
 
         public void Put(int key, string value)
         {
-            var index = this.GetHash(key);
-            this._bucket[index] ??= new LinkedList<KeyValuePair<int, string>>();
-            var bucket = this._bucket[index];
-            var result = this._bucket[index].FirstOrDefault(x => x.Key == key);
+            var bucket = this.GetOrCreateCurrentKeyBucket(key);
+            var pair = this.GetPair(key);
 
-            if (!result.Equals(default(KeyValuePair<int, string>)))
-                bucket.Remove(result);
+            if (!this.IsDefaultPair(pair))
+                bucket.Remove(pair);
             
             bucket.AddLast(new KeyValuePair<int, string>(key, value));
         }
 
         public string Get(int key)
         {
-            var index = this.GetHash(key);
-            if(this._bucket[index] == null)
-                throw new InvalidOperationException("No such key found");
-            
-            var result = this._bucket[index].FirstOrDefault(x => x.Key == key);
-            if (result.Equals(default(KeyValuePair<int, string>)))
+            var pair = this.GetPair(key);
+            if(this.IsDefaultPair(pair))
                 throw new InvalidOperationException("No such key found");
 
-            return result.Value;
+            return pair.Value;
         }
 
         public bool Delete(int key)
         {
-            var index = this.GetHash(key);
-            var bucket = this._bucket[index];
-
-            if (bucket == null)
+            var pair = this.GetPair(key);
+            if (this.IsDefaultPair(pair))
                 throw new InvalidOperationException("No suck key found");
+            
+            var bucket = this.GetOrCreateCurrentKeyBucket(key);
+            return bucket.Remove(pair);
+        }
 
-            var result = bucket.FirstOrDefault(x => x.Key == key);
-            if (result.Equals(default(KeyValuePair<int, string>)))
-                throw new InvalidOperationException("No such key found");
+        private KeyValuePair<int, string> GetPair(int key)
+        {
+            var index = this.GetHash(key);
+            return this._bucket[index] == null ?
+                default(KeyValuePair<int, string>) :
+                this._bucket[index].FirstOrDefault(x => x.Key == key);
+        }
 
-            return bucket.Remove(result);
+        private LinkedList<KeyValuePair<int, string>> GetOrCreateCurrentKeyBucket(int key)
+        {
+            var index = this.GetHash(key);
+            return this._bucket[index] ??= new LinkedList<KeyValuePair<int, string>>();
+        }
+
+        private bool IsDefaultPair(KeyValuePair<int, string> pair)
+        {
+            return pair.Equals(default(KeyValuePair<int, string>));
         }
 
         private int GetHash(int key)
