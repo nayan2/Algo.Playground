@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Basic
+﻿namespace Basic
 {
     // TODO :: Implement the class
     // public class LinkList<T> where T : class, IComparable

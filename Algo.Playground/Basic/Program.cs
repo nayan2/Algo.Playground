@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Basic.HashMap;
+using Basic.BST;
 
 namespace Basic
 {
@@ -8,7 +7,31 @@ namespace Basic
     {
         static void Main(string[] args)
         {
+            MyBst test = new MyBst();
+            test.Insert(7);
+            test.Insert(4);
+            test.Insert(9);
+            test.Insert(1);
+            test.Insert(6);
+            test.Insert(8);
+            test.Insert(10); 
             
+            MyBst test2 = new MyBst();
+            test2.Insert(7);
+            test2.Insert(4);
+            test2.Insert(9);
+            test2.Insert(1);
+            test2.Insert(6);
+            test2.Insert(8);
+            test2.Insert(10); 
+            
+            // bool result = test.Find(1);
+            // Console.WriteLine(test.TraversePreOrder());
+            // Console.WriteLine(test.TraverseInOrder());
+            // Console.WriteLine(test.TraversePostOrder());
+            //var height = test.Height();
+            //var min = test.MinInATree();
+            var isTreeEqual = test.IsEqual(test, test2);
         }
     }
     
