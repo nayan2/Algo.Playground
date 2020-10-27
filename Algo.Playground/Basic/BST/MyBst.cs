@@ -4,6 +4,30 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace Basic.BST
 {
+    // MyBst test = new MyBst();
+    // test.Insert(7);
+    // test.Insert(7);
+    // test.Insert(4);
+    // test.Insert(9);
+    // test.Insert(1);
+    // test.Insert(6);
+    // test.Insert(8);
+    // test.Insert(10);
+    // test.Insert(0);
+    // test.Insert(2);
+    // test.Insert(5);
+    // test.Insert(10);
+
+    // bool result = test.Find(1);
+    // Console.WriteLine(test.TraversePreOrder());
+    // Console.WriteLine(test.TraverseInOrder());
+    // Console.WriteLine(test.TraversePostOrder());
+    // var height = test.Height();
+    // var min = test.MinInATree();
+    // var isTreeEqual = test.IsEqual(null);
+    // var isBst = test.IsBst();
+    // test.PrintKthNode(1);
+    // test.PrintBreadthFirstSearchOrder();
     public class MyBst
     {
         private Node _root;
@@ -40,8 +64,10 @@ namespace Basic.BST
                         currentNode.Right = node;
                         break;
                     }
-                    if (value > currentNode.Value && currentNode.Right != null)
+                    else if (value > currentNode.Value && currentNode.Right != null)
                         currentNode = currentNode.Right;
+                    else
+                        break;
                 }
             }
         } 
@@ -91,21 +117,43 @@ namespace Basic.BST
             return this.MinInATree(this._root);
         }
 
-        public bool IsEqual(MyBst left, MyBst right)
+        public bool IsEqual(MyBst other)
         {
-            if(left == right)
-                throw  new ArgumentException("Both tree can't be null!", $"{nameof(left)}, {nameof(right)}");
-            return this.IsEqual(left._root, right._root);
+            if(other == null || this._root == other._root)
+                throw  new ArgumentException("Tree can't be null or empty!", $"{nameof(other)}");
+            
+            return this.IsEqual(this._root, other._root);
+        }
+
+        //O(n)
+        public bool IsBst()
+        {
+            return this.IsBst(this._root, int.MinValue, int.MaxValue);
+        }
+
+        public void PrintKthNode(int level)
+        {
+            this.PrintKthNode(this._root, level);
+        }
+
+        public void PrintBreadthFirstSearchOrder()
+        {
+            for (int i = 0; i <= this.Height(); i++)
+            {
+                this.PrintKthNode(i);
+            }
         }
 
         private bool IsEqual(Node left, Node right)
         {
             if (left == right)
                 return true;
-            var isValueEqual = left.Value == right.Value;
-            var isLeftEqual = this.IsEqual(left.Left, right.Left);
-            var isRightEqual = this.IsEqual(left.Right, right.Right);
-            return isLeftEqual && isRightEqual && isValueEqual;
+            if (left == null || right == null)
+                return false;
+
+            return left.Value == right.Value
+                   && this.IsEqual(left.Left, right.Left)
+                   && this.IsEqual(left.Right, right.Right);
         }
         
         private string ToPreOrder(Node node)
@@ -168,6 +216,31 @@ namespace Basic.BST
         private bool IsLeafNode(Node node)
         {
             return node.Left == node.Right;
+        }
+
+        private bool IsBst(Node root, int from, int to)
+        {
+            if (root == null)
+                return true;
+            
+            return from < root.Value && root.Value < to
+                                     && this.IsBst(root.Left, from, root.Value)
+                                     && this.IsBst(root.Right, root.Value, to);
+        }
+
+        private void PrintKthNode(Node root, int requiredLevel)
+        {
+            if (root == null)
+                return;
+
+            if (requiredLevel == 0)
+            {
+                Console.Write("{0} ", root.Value);
+                return;
+            }
+            
+            this.PrintKthNode(root.Left, requiredLevel - 1);
+            this.PrintKthNode(root.Right, requiredLevel - 1);
         }
     }
 }
