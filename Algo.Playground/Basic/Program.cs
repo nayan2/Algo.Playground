@@ -1,4 +1,5 @@
-﻿using Basic.AVL;
+﻿using System.Net.NetworkInformation;
+using Basic.AVL;
 
 namespace Basic
 {
@@ -7,9 +8,10 @@ namespace Basic
         static void Main(string[] args)
         {
             var avl = new AvlTree();
-            avl.Insert(1);
-            avl.Insert(2);
-            avl.Insert(3);
+            avl.Insert(10);
+            avl.Insert(14);
+            avl.Insert(16);
+            avl.Insert(15);
         }
     }
 }

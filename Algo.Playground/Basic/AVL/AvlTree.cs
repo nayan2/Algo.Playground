@@ -44,19 +44,53 @@ namespace Basic.AVL
             else
                 root.Right = this.Insert(root.Right, data);
 
-            root.Height = Math.Max(root.Left?.Height ?? -1, root.Right?.Height ?? -1) + 1;
+            root.Height = this.NodeHeight(root);
             root.BalanceFactor = this.BalanceFactor(root);
-            
-            if(this.LeftHeavy(root) && root.Left?.BalanceFactor >= 1)
-                Console.WriteLine("Left heavy tree and need a right rotation on " + root.Value);
-            else if(this.LeftHeavy(root) && root.Left?.BalanceFactor <= -1)
-                Console.WriteLine("Left heavy and need to perform a left right rotation, left rotation on " + root.Left?.Value + "and right rotation on " + root.Value);
-            else if(this.RightHeave(root) && root.Right?.BalanceFactor <= -1)
-                Console.WriteLine("Right heavy tree and need a left rotation on " + root.Value);
-            else if(this.RightHeave(root) && root.Right?.BalanceFactor >= 1)
-                Console.WriteLine("Right heavy tree and need a right left rotation, right rotation on " + root.Right?.Value + "and left rotation on " + root.Value);
+            root = this.BalanceTree(root);
             
             return root;
+        }
+
+        private Node BalanceTree(Node root)
+        {
+            if (this.IsLeftHeavy(root))
+            {
+                if (root.Left?.BalanceFactor < 0)
+                    root.Left = this.LeftRotate(root.Left);
+                return this.RightRotate(root);
+            }
+            else if (this.IsRightHeavy(root))
+            {
+                if (root.Right?.BalanceFactor > 0)
+                    root.Right = this.RightRotate(root.Right);
+                return this.LeftRotate(root);
+            }
+            return root;
+        }
+
+        private Node RightRotate(Node root)
+        {
+            var newRoot = root.Left;
+            root.Left = newRoot.Right;
+            newRoot.Right = root;
+            newRoot.Height = this.NodeHeight(newRoot);
+            newRoot.Right.Height = this.NodeHeight(newRoot.Right);
+            return newRoot;
+        }
+
+        private Node LeftRotate(Node root)
+        {
+            var newRoot = root.Right;
+            root.Right = newRoot.Left;
+            newRoot.Left = root;
+            newRoot.Height = this.NodeHeight(newRoot);
+            newRoot.Left.Height = this.NodeHeight(newRoot.Left);
+            return newRoot;
+        }
+
+        private int NodeHeight(Node node)
+        {
+            return Math.Max(node.Left?.Height ?? -1, node.Right?.Height ?? -1) + 1;
         }
 
         private int BalanceFactor(Node node)
@@ -64,12 +98,12 @@ namespace Basic.AVL
             return (node.Left?.Height ?? -1) - (node.Right?.Height ?? -1);
         }
 
-        private bool RightHeave(Node node)
+        private bool IsRightHeavy(Node node)
         {
             return (node.Left?.Height ?? -1) - (node.Right?.Height ?? -1) < -1;
         }
 
-        private bool LeftHeavy(Node node)
+        private bool IsLeftHeavy(Node node)
         {
             return (node.Left?.Height ?? -1) - (node.Right?.Height ?? -1) > 1;
         }
