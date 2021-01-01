@@ -2,6 +2,11 @@
 
 namespace Basic.AVL
 {
+    // var avl = new AvlTree();
+    // avl.Insert(10);
+    // avl.Insert(14);
+    // avl.Insert(16);
+    // avl.Insert(15);
     public class AvlTree
     {
         private Node _root;
